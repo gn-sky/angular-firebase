@@ -1,9 +1,23 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { TaskComponent } from './task/task.component';
+
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    declarations: [AppComponent]
+    declarations: [
+      AppComponent,
+      TaskComponent
+    ],
+    imports: [
+      MatCardModule,
+      MatIconModule,
+      MatToolbarModule
+    ]
   }));
 
   it('should create the app', () => {
@@ -22,6 +36,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('kanban-fire app is running!');
+    expect(compiled.querySelector('.mat-toolbar span')?.textContent).toContain('Kanban Fire');
   });
 });
