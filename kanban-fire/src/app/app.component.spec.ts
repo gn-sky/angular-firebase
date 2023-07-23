@@ -5,6 +5,7 @@ import { TaskComponent } from './task/task.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 describe('AppComponent', () => {
@@ -14,6 +15,7 @@ describe('AppComponent', () => {
       TaskComponent
     ],
     imports: [
+      DragDropModule,
       MatCardModule,
       MatIconModule,
       MatToolbarModule
