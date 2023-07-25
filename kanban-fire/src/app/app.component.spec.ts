@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 describe('AppComponent', () => {
@@ -16,6 +17,7 @@ describe('AppComponent', () => {
     ],
     imports: [
       DragDropModule,
+      MatDialogModule,
       MatCardModule,
       MatIconModule,
       MatToolbarModule
