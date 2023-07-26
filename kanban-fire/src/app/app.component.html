@@ -38,7 +38,7 @@
         (cdkDropListDropped)="drop($event)"        
         class="list">
 
-        <p class="empty-list" *ngIf="inProgress.length === 0">Empty List</p>
+        <p class="empty-label" *ngIf="inProgress.length === 0">Empty List</p>
         <app-task (edit)="editTask('inProgress', $event)" *ngFor="let task of inProgress" cdkDrag [task]="task"></app-task>
       </mat-card>
     </div>
@@ -54,7 +54,7 @@
         [cdkDropListConnectedTo]="[todoList, inProgressList]"
         (cdkDropListDropped)="drop($event)"
         class="list">
-        <p class="list-empty" *ngIf="done.length === 0">Empty List</p>
+        <p class="empty-label" *ngIf="done.length === 0">Empty List</p>
         <app-task (edit)="editTask('done', $event)" *ngFor="let task of done" cdkDrag [task]="task"></app-task>
       </mat-card>
     </div>
