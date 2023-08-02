@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Task } from './task/task';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, updateDoc, } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import {
   TaskDialogComponent,
@@ -29,7 +29,7 @@ export class AppComponent {
     this.todo$ = collectionData(todoCollection, options) as Observable<Task[]>;
   }
 
-  editTask = (list: 'done' | 'todo' | 'inProgress', task: Task) => {
+  editTask = (collection: 'done' | 'todo' | 'inProgress', task: Task) => {
     const dialogRef = this.dialog.open(TaskDialogComponent, {
       width: '270px',
       data: {
@@ -44,15 +44,11 @@ export class AppComponent {
         if (!result) {
           return;
         }
-        // const dataList = this[list];
-        // const taskIndex = dataList.indexOf(task);
         if (result.delete) {
-          // dataList.splice(taskIndex, 1);
-          deleteDoc(doc(this.firestore, 'todo', <string>task.id));
+          deleteDoc(doc(this.firestore, collection, <string>task.id));
         } else {
-          // dataList[taskIndex] = task;
-          // const todoDocRef = doc(this.firestore, 'todo', '0');
-          // updateDoc(todoDocRef, task);
+          const todoDocRef = doc(this.firestore, collection, <string>task.id);
+          updateDoc(todoDocRef, <any>task);
         }
       });
   };
