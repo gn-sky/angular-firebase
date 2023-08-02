@@ -7,6 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { environment } from 'src/environments/environment';
 
 
 describe('AppComponent', () => {
@@ -20,7 +23,9 @@ describe('AppComponent', () => {
       MatDialogModule,
       MatCardModule,
       MatIconModule,
-      MatToolbarModule
+      MatToolbarModule,
+      provideFirebaseApp(() => initializeApp(environment.firebase)),
+      provideFirestore(() => getFirestore()),
     ]
   }));
 

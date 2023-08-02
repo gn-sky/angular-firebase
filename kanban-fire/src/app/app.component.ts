@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Task } from './task/task';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import {
   TaskDialogComponent,
   TaskDialogResult,
 } from './task-dialog/task-dialog.component';
 import { take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,20 +18,16 @@ import { take } from 'rxjs/operators';
 export class AppComponent {
   title = 'kanban-fire';
 
-  todo: Task[] = [
-    {
-      title: 'Start',
-      description: 'generate Angular app',
-    },
-    {
-      title: 'Add Angular material',
-      description: 'ng add @angular/material',
-    },
-  ];
+  todo$: Observable<Task[]>;
   inProgress: Task[] = [];
   done: Task[] = [];
+  firestore: Firestore = inject(Firestore);
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) {
+    const todoCollection = collection(this.firestore, 'todo');
+    const options = { idField: 'id' };
+    this.todo$ = collectionData(todoCollection, options) as Observable<Task[]>;
+  }
 
   editTask = (list: 'done' | 'todo' | 'inProgress', task: Task) => {
     const dialogRef = this.dialog.open(TaskDialogComponent, {
@@ -46,12 +44,15 @@ export class AppComponent {
         if (!result) {
           return;
         }
-        const dataList = this[list];
-        const taskIndex = dataList.indexOf(task);
+        // const dataList = this[list];
+        // const taskIndex = dataList.indexOf(task);
         if (result.delete) {
-          dataList.splice(taskIndex, 1);
+          // dataList.splice(taskIndex, 1);
+          deleteDoc(doc(this.firestore, 'todo', <string>task.id));
         } else {
-          dataList[taskIndex] = task;
+          // dataList[taskIndex] = task;
+          // const todoDocRef = doc(this.firestore, 'todo', '0');
+          // updateDoc(todoDocRef, task);
         }
       });
   };
@@ -83,7 +84,7 @@ export class AppComponent {
         if (!result) {
           return;
         }
-        this.todo.push(result.task);
+        addDoc(collection(this.firestore, 'todo'), result.task);
       });
   };
 }
