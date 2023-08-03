@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Task } from './task/task';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, updateDoc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import {
   TaskDialogComponent,
@@ -9,6 +9,7 @@ import {
 } from './task-dialog/task-dialog.component';
 import { take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { runTransaction } from '@firebase/firestore';
 
 @Component({
   selector: 'app-root',
@@ -19,17 +20,19 @@ export class AppComponent {
   title = 'kanban-fire';
 
   todo$: Observable<Task[]>;
-  inProgress: Task[] = [];
+  inProgress$: Observable<Task[]>;
   done: Task[] = [];
   firestore: Firestore = inject(Firestore);
 
   constructor(private dialog: MatDialog) {
     const todoCollection = collection(this.firestore, 'todo');
+    const inProgressCollection = collection(this.firestore, 'inProgress');
     const options = { idField: 'id' };
     this.todo$ = collectionData(todoCollection, options) as Observable<Task[]>;
+    this.inProgress$ = collectionData(inProgressCollection, options) as Observable<Task[]>;
   }
 
-  editTask = (list: 'done' | 'todo' | 'inProgress', task: Task) => {
+  editTask = (collection: 'done' | 'todo' | 'inProgress', task: Task) => {
     const dialogRef = this.dialog.open(TaskDialogComponent, {
       width: '270px',
       data: {
@@ -44,15 +47,11 @@ export class AppComponent {
         if (!result) {
           return;
         }
-        // const dataList = this[list];
-        // const taskIndex = dataList.indexOf(task);
         if (result.delete) {
-          // dataList.splice(taskIndex, 1);
-          deleteDoc(doc(this.firestore, 'todo', <string>task.id));
+          deleteDoc(doc(this.firestore, collection, task.id as string));
         } else {
-          // dataList[taskIndex] = task;
-          // const todoDocRef = doc(this.firestore, 'todo', '0');
-          // updateDoc(todoDocRef, task);
+          const todoDocRef = doc(this.firestore, collection, task.id as string);
+          updateDoc(todoDocRef, <any>task);
         }
       });
   };
@@ -61,6 +60,13 @@ export class AppComponent {
     if (event.previousContainer === event.container) {
       return;
     }
+
+    const item = event.previousContainer.data[event.previousIndex];
+    runTransaction(this.firestore, async () => {
+      deleteDoc(doc(this.firestore, event.previousContainer.id, item.id as string));
+      addDoc(collection(this.firestore, event.container.id), item);
+    });
+
     transferArrayItem(
       event.previousContainer.data,
       event.container.data,
