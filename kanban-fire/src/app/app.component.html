@@ -8,7 +8,7 @@
     <mat-icon>add</mat-icon>Add Task
   </button>
   <div class="container-wrapper"
-    *ngIf="{ todo: todo$ | async, inProgress: inProgress$ | async } as o">
+    *ngIf="{ todo: todo$ | async, inProgress: inProgress$ | async, done: done$ | async } as o">
     <div class="container">
       <h2>Backlog</h2>
 
@@ -51,12 +51,12 @@
         cdkDropList
         id="done"
         #doneList="cdkDropList"
-        [cdkDropListData]="done"
+        [cdkDropListData]="o.done ?? []"
         [cdkDropListConnectedTo]="[todoList, inProgressList]"
         (cdkDropListDropped)="drop($event)"
         class="list">
-        <p class="empty-label" *ngIf="done.length === 0">Empty List</p>
-        <app-task (edit)="editTask('done', $event)" *ngFor="let task of done" cdkDrag [task]="task"></app-task>
+        <p class="empty-label" *ngIf="o.done?.length === 0">Empty List</p>
+        <app-task (edit)="editTask('done', $event)" *ngFor="let task of o.done" cdkDrag [task]="task"></app-task>
       </mat-card>
     </div>
 

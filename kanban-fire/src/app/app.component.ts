@@ -21,18 +21,20 @@ export class AppComponent {
 
   todo$: Observable<Task[]>;
   inProgress$: Observable<Task[]>;
-  done: Task[] = [];
+  done$: Observable<Task[]>;
   firestore: Firestore = inject(Firestore);
 
   constructor(private dialog: MatDialog) {
     const todoCollection = collection(this.firestore, 'todo');
     const inProgressCollection = collection(this.firestore, 'inProgress');
+    const doneCollection = collection(this.firestore, 'done');
     const options = { idField: 'id' };
     this.todo$ = collectionData(todoCollection, options) as Observable<Task[]>;
     this.inProgress$ = collectionData(inProgressCollection, options) as Observable<Task[]>;
+    this.done$ = collectionData(doneCollection, options) as Observable<Task[]>;
   }
 
-  editTask = (collection: 'done' | 'todo' | 'inProgress', task: Task) => {
+  editTask = (collection: 'todo' | 'inProgress' | 'done', task: Task) => {
     const dialogRef = this.dialog.open(TaskDialogComponent, {
       width: '270px',
       data: {
