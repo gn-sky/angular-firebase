@@ -10,6 +10,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from 'src/environments/environment';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 describe('AppComponent', () => {
@@ -23,6 +24,7 @@ describe('AppComponent', () => {
       MatDialogModule,
       MatCardModule,
       MatIconModule,
+      MatProgressSpinnerModule,
       MatToolbarModule,
       provideFirebaseApp(() => initializeApp(environment.firebase)),
       provideFirestore(() => getFirestore()),
