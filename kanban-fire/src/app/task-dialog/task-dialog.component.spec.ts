@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
@@ -20,6 +21,7 @@ describe('TaskDialogComponent', () => {
       imports: [
         BrowserAnimationsModule,
         MatDialogModule,
+        MatIconModule,
         MatInputModule,
         FormsModule
       ],
