@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "kanbanfire-cf28a": {
+      "hosting": {
+        "kanban-fire": [
+          "kanbanfire-cf28a"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "kanbanfire-cf28a"
+  }
+}
