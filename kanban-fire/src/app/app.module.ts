@@ -9,7 +9,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; 
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
@@ -18,6 +17,7 @@ import { TaskComponent } from './task/task.component';
 import { TaskDialogComponent } from './task-dialog/task-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment';
+import { ToolbarModule } from './toolbar/toolbar.module';
 
 @NgModule({
   declarations: [
@@ -35,10 +35,10 @@ import { environment } from 'src/environments/environment';
     MatCardModule,
     MatIconModule,
     MatInputModule,
-    MatProgressSpinnerModule,    
-    MatToolbarModule,
+    MatProgressSpinnerModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
+    ToolbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

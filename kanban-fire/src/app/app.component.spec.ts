@@ -4,13 +4,13 @@ import { TaskComponent } from './task/task.component';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from 'src/environments/environment';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ToolbarModule } from './toolbar/toolbar.module';
 
 
 describe('AppComponent', () => {
@@ -25,9 +25,9 @@ describe('AppComponent', () => {
       MatCardModule,
       MatIconModule,
       MatProgressSpinnerModule,
-      MatToolbarModule,
       provideFirebaseApp(() => initializeApp(environment.firebase)),
       provideFirestore(() => getFirestore()),
+      ToolbarModule
     ]
   }));
 
