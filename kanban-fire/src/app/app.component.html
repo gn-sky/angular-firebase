@@ -1,7 +1,7 @@
-<mat-toolbar color="primary">
-  <mat-icon>local_fire_department</mat-icon>
-  <span>Kanban Fire</span>
-</mat-toolbar>
+<app-toolbar
+  [iconName]="'local_fire_department'"
+  [title]="'Kanban Fire'"
+></app-toolbar>
 
 <div class="content-wrapper">
   <button (click)="newTask()" mat-button>
