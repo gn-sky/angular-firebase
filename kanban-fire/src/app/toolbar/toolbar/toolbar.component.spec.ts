@@ -21,4 +21,13 @@ describe('ToolbarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render title', () => {
+    component.title = "Any title";
+    
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('.mat-toolbar span')?.textContent).toContain(component.title);
+  });  
 });
