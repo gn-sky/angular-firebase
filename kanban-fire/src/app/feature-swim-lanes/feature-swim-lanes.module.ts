@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { DataAccessSwimLanesModule } from '../data-access-swim-lanes/data-access-swim-lanes.module';
 import { SwimLanesComponent } from './swim-lanes/swim-lanes.component';
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { environment } from 'src/environments/environment';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +24,7 @@ import { MatDialogModule } from '@angular/material/dialog';
   ],
   imports: [
     CommonModule,
+    DataAccessSwimLanesModule,
     DragDropModule,
     FormsModule,    
     MatButtonModule,
@@ -32,9 +32,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDialogModule,      
     MatIconModule,
     MatInputModule,    
-    MatProgressSpinnerModule,    
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore()),    
+    MatProgressSpinnerModule,
   ],
   exports: [
     SwimLanesComponent

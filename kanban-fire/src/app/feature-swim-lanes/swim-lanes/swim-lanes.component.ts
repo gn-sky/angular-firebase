@@ -1,7 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Task } from '../task/task';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, updateDoc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import {
   TaskDialogComponent,
@@ -9,7 +8,7 @@ import {
 } from '../task-dialog/task-dialog.component';
 import { take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { runTransaction } from '@firebase/firestore';
+import { SwimLanesService } from '../../data-access-swim-lanes/swim-lanes.service';
 
 @Component({
   selector: 'app-swim-lanes',
@@ -20,16 +19,14 @@ export class SwimLanesComponent {
   todo$: Observable<Task[]>;
   inProgress$: Observable<Task[]>;
   done$: Observable<Task[]>;
-  firestore: Firestore = inject(Firestore);
 
-  constructor(private dialog: MatDialog) {
-    const todoCollection = collection(this.firestore, 'todo');
-    const inProgressCollection = collection(this.firestore, 'inProgress');
-    const doneCollection = collection(this.firestore, 'done');
-    const options = { idField: 'id' };
-    this.todo$ = collectionData(todoCollection, options) as Observable<Task[]>;
-    this.inProgress$ = collectionData(inProgressCollection, options) as Observable<Task[]>;
-    this.done$ = collectionData(doneCollection, options) as Observable<Task[]>;
+  constructor(
+    private dialog: MatDialog,
+    private swimLanesService: SwimLanesService,
+  ) {
+    this.todo$ = this.swimLanesService.getCollection('todo');
+    this.inProgress$ = this.swimLanesService.getCollection('inProgress');
+    this.done$ = this.swimLanesService.getCollection('done');
   }
   
   editTask = (collection: 'todo' | 'inProgress' | 'done', task: Task) => {
@@ -48,10 +45,9 @@ export class SwimLanesComponent {
           return;
         }
         if (result.delete) {
-          deleteDoc(doc(this.firestore, collection, task.id as string));
+          this.swimLanesService.deleteDocument(collection, task.id as string);
         } else {
-          const todoDocRef = doc(this.firestore, collection, task.id as string);
-          updateDoc(todoDocRef, <any>task);
+          this.swimLanesService.updateDocument(collection, task);
         }
       });
   };
@@ -62,10 +58,7 @@ export class SwimLanesComponent {
     }
 
     const item = event.previousContainer.data[event.previousIndex];
-    runTransaction(this.firestore, async () => {
-      deleteDoc(doc(this.firestore, event.previousContainer.id, item.id as string));
-      addDoc(collection(this.firestore, event.container.id), item);
-    });
+    this.swimLanesService.transact(event.previousContainer.id, event.container.id, item);
 
     transferArrayItem(
       event.previousContainer.data,
@@ -76,6 +69,7 @@ export class SwimLanesComponent {
   };
 
   newTask = () => {
+    const newTaskStartsWith = 'todo';
     const dialogRef = this.dialog.open(TaskDialogComponent, {
       width: '270px',
       data: {
@@ -90,7 +84,7 @@ export class SwimLanesComponent {
         if (!result) {
           return;
         }
-        addDoc(collection(this.firestore, 'todo'), result.task);
+        this.swimLanesService.addDocument(newTaskStartsWith, result.task);
       });
   };
 }
