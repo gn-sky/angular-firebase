@@ -7,16 +7,14 @@ describe('TaskComponent', () => {
   let component: TaskComponent;
   let fixture: ComponentFixture<TaskComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [TaskComponent],
-      imports: [MatCardModule],
-    }).compileComponents();
-  });
-
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [MatCardModule],
+      declarations: [TaskComponent]
+    });    
     fixture = TestBed.createComponent(TaskComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();    
   });
 
   it('should create', () => {
