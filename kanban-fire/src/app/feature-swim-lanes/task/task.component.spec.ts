@@ -11,10 +11,10 @@ describe('TaskComponent', () => {
     TestBed.configureTestingModule({
       imports: [MatCardModule],
       declarations: [TaskComponent]
-    });    
+    });
     fixture = TestBed.createComponent(TaskComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();    
+    fixture.detectChanges();
   });
 
   it('should create', () => {
