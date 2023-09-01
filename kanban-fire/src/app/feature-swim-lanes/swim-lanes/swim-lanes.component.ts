@@ -2,13 +2,11 @@ import { Component } from '@angular/core';
 import { Task } from '../task/task';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  TaskDialogComponent,
-  TaskDialogResult,
-} from '../task-dialog/task-dialog.component';
+import { TaskDialogComponent } from '../task-dialog/task-dialog.component';
 import { take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { SwimLanesService } from '../../data-access-swim-lanes/swim-lanes.service';
+import { TaskDialogResult } from '../task-dialog/task-dialog';
 
 @Component({
   selector: 'app-swim-lanes',
@@ -28,7 +26,7 @@ export class SwimLanesComponent {
     this.inProgress$ = this.swimLanesService.getCollection('inProgress');
     this.done$ = this.swimLanesService.getCollection('done');
   }
-  
+
   editTask = (collection: 'todo' | 'inProgress' | 'done', task: Task) => {
     const dialogRef = this.dialog.open(TaskDialogComponent, {
       width: '270px',
