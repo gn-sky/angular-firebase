@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Task } from '../task/task';
+import { TaskDialogData } from './task-dialog';
 
 @Component({
   selector: 'app-task-dialog',
@@ -19,14 +20,4 @@ export class TaskDialogComponent {
       this.data.task.description = this.backupTask.description;
       this.dialogRef.close();
   };
-}
-
-export interface TaskDialogData {
-  task: Partial<Task>;
-  enableDelete: boolean;
-}
-
-export interface TaskDialogResult {
-  task: Task;
-  delete?: boolean;
 }

@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TaskDialogComponent, TaskDialogData } from './task-dialog.component';
+import { TaskDialogComponent } from './task-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TaskDialogData } from './task-dialog';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
