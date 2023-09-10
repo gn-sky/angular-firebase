@@ -5,14 +5,15 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconModule } from '@angular/material/icon';
+import { TaskDialogData } from './task-dialog';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
   let fixture: ComponentFixture<TaskDialogComponent>;
-  const mockData = {
-    task: { title: 'Mock Task', description: 'This is a mock task.' },
-    enableDelete: true
+  const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
+  const mockTaskDialogData: TaskDialogData = {
+    task: { title: 'Test Title', description: 'Test Description' },
+    enableDelete: false
   };
 
   beforeEach(() => {
@@ -21,13 +22,12 @@ describe('TaskDialogComponent', () => {
       imports: [
         BrowserAnimationsModule,
         MatDialogModule,
-        MatIconModule,
         MatInputModule,
         FormsModule
       ],
       providers: [
-        { provide: MAT_DIALOG_DATA, useValue: mockData },
-        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: mockTaskDialogData },
+        { provide: MatDialogRef, useValue: dialogRefSpy },
       ]
     });
     fixture = TestBed.createComponent(TaskDialogComponent);
@@ -37,5 +37,16 @@ describe('TaskDialogComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should cancel and restore original task values', () => {
+    component.data.task.title = 'Modified Title';
+    component.data.task.description = 'Modified Description';
+
+    component.cancel();
+
+    expect(dialogRefSpy.close).toHaveBeenCalled();
+    expect(component.data.task.title).toBe('Test Title');
+    expect(component.data.task.description).toBe('Test Description');
   });
 });

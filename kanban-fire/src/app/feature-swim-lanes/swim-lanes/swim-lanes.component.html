@@ -1,0 +1,87 @@
+<div class="content-wrapper">
+    <button (click)="newTask()" mat-button>
+      <mat-icon>add</mat-icon>Add Task
+    </button>
+    <ng-container
+      *ngIf="{
+        todo: todo$ | async,
+        inProgress: inProgress$ | async,
+        done: done$ | async
+      } as o"
+    >
+      <div *ngIf="!o.todo || !o.inProgress || !o.done">
+        <mat-spinner></mat-spinner>
+      </div>
+  
+      <div class="container-wrapper">
+        <div class="container">
+          <h2>Backlog</h2>
+  
+          <mat-card
+            cdkDropList
+            id="todo"
+            #todoList="cdkDropList"
+            [cdkDropListData]="o.todo ?? []"
+            [cdkDropListConnectedTo]="[inProgressList, doneList]"
+            (cdkDropListDropped)="drop($event)"
+            class="list"
+          >
+            <p class="empty-label" *ngIf="o.todo?.length === 0">Empty List</p>
+  
+            <app-task
+              (edit)="editTask('todo', $event)"
+              *ngFor="let task of o.todo"
+              cdkDrag
+              [task]="task"
+            ></app-task>
+          </mat-card>
+        </div>
+  
+        <div class="container">
+          <h2>In Progress</h2>
+  
+          <mat-card
+            cdkDropList
+            id="inProgress"
+            #inProgressList="cdkDropList"
+            [cdkDropListData]="o.inProgress ?? []"
+            [cdkDropListConnectedTo]="[todoList, doneList]"
+            (cdkDropListDropped)="drop($event)"
+            class="list"
+          >
+            <p class="empty-label" *ngIf="o.inProgress?.length === 0">
+              Empty List
+            </p>
+            <app-task
+              (edit)="editTask('inProgress', $event)"
+              *ngFor="let task of o.inProgress"
+              cdkDrag
+              [task]="task"
+            ></app-task>
+          </mat-card>
+        </div>
+  
+        <div class="container">
+          <h2>Done</h2>
+  
+          <mat-card
+            cdkDropList
+            id="done"
+            #doneList="cdkDropList"
+            [cdkDropListData]="o.done ?? []"
+            [cdkDropListConnectedTo]="[todoList, inProgressList]"
+            (cdkDropListDropped)="drop($event)"
+            class="list"
+          >
+            <p class="empty-label" *ngIf="o.done?.length === 0">Empty List</p>
+            <app-task
+              (edit)="editTask('done', $event)"
+              *ngFor="let task of o.done"
+              cdkDrag
+              [task]="task"
+            ></app-task>
+          </mat-card>
+        </div>
+      </div>
+    </ng-container>
+  </div>
